@@ -1,32 +1,14 @@
 var http = require('http');
-var url = require('url');
-var qs = require('querystring');
-var processRequest = function(req, callback) {
-    var body = '';
-    req.on('data', function (data) {
-        body += data;
-    });
-    req.on('end', function() {
-        callback(qs.parse(body));
-    });
-}
-var controller = function(req, res) {
-    var message = '';
-    switch(req.method) {
-        case 'GET': message = "That's GET message"; break;
-        case 'POST': message = "That's POST message"; break;
-        case 'PUT': 
-            processRequest(req, function(data) {
-                message = "That's PUT message. You are editing " + data.book + " book.";
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.end(message + "\n");
-            });
-            return;
-        break;
-        case 'DELETE': message = "That's DELETE message"; break;
-    }
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(message + '\n');
-}
-http.createServer(controller).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
+var fs = require('fs');
+var path = require('path');
+
+var files = {};
+var port = 9000;
+var host = '127.0.0.1';
+
+var assets = function(req, res) {
+    // ...
+};
+
+var app = http.createServer(assets).listen(port, host);
+console.log("Listening on " + host + ":" + port);
