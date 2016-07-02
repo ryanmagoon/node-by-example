@@ -1,5 +1,17 @@
-var http = require('http');
-var fs = require('fs');
+var http = require('http'), res;
+var controller = function(request, response) {
+    res = response;
+    if(request.url === '/on') {
+        model.update(true);
+    } else if (request.url === '/off') {
+        model.update(false);
+    } else {
+        view.render();
+    }
+};
+http.createServer(controller).listen(1337, '127.0.0.1');
+console.log('Server running at http://127.0.0.1:1337/');
+
 var view = {
     render: function() {
         var html = ' ';
@@ -16,24 +28,10 @@ var view = {
         res.end(html + '\n');
     }
 };
-http.createServer(function(req, res){
-    var content = '';
-    var type = '';
-    if (req.url === '/') {
-        content = fs.readFileSync('./page.html');
-        type = 'text/html';
-    } else if (req.url === '/styles.css') {
-        content = fs.readFileSync('./styles.css');
-        type = 'text/css';
-    } else if (req.url === '/api/user/new') {
-        // Do actions like
-        // reading POST parameters
-        // storing the user into the database
-        content = '{"success": true}';
-        type = 'application/json';
+var model = {
+    status: false,
+    update: function(s) {
+        this.status = s;
+        view.render();
     }
-    res.writeHead(200, {'Content-Type': type});
-    res.end(content + '\n');
-}).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
-
+};
