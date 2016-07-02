@@ -1,5 +1,15 @@
 var http = require('http');
 var url = require('url');
+var qs = require('querystring');
+var processRequest = function(req, callback) {
+    var body = '';
+    req.on('data', function (data) {
+        body += data;
+    });
+    req.on('end', function() {
+        callback(qs.parse(body));
+    });
+}
 var controller = function(req, res) {
     var message = '';
     switch(req.method) {
