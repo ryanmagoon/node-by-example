@@ -17,7 +17,7 @@ var controller = function(req, res) {
         case 'POST': message = "That's POST message"; break;
         case 'PUT': 
             processRequest(req, function(data) {
-                message = "That's PUT message. You are editing " + data.book + "book.";
+                message = "That's PUT message. You are editing " + data.book + " book.";
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.end(message + "\n");
             });
