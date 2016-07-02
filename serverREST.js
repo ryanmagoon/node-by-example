@@ -22,7 +22,6 @@ var controller = function(req, res) {
                 res.end(message + "\n");
             });
             return;
-        break;
         case 'DELETE': message = "That's DELETE message"; break;
     }
     res.writeHead(200, {'Content-Type': 'text/html'});

@@ -13,7 +13,7 @@ var assets = function(req, res) {
     }
         res.writeHead(code, {'Content-Type': 'text/html'});
         res.end(message);
-    }
+    };
 
     var serve = function(file) {
     var contentType;
@@ -29,7 +29,27 @@ var assets = function(req, res) {
     }
         res.writeHead(200, {'Content-Type': contentType});
         res.end(file.content);
+    };
+
+    var readFile = function(filePath) {
+        if(files[filePath]) {
+            serve(files[filePath]);
+        } else {
+            fs.readFile(filePath, function(err, data) {
+                if(err) {
+                    sendError('Error reading ' + filePath + '.');
+                    return;
+                }
+                files[filePath] = {
+                    ext: filePath.split(".").pop(),
+                    content: data
+                };
+                serve(files[filePath]);
+            });
+        }
     }
+
+    readFile(path.normalize(__dirname + req.url));
 };
 
 var app = http.createServer(assets).listen(port, host);
