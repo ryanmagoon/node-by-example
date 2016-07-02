@@ -1,18 +1,14 @@
 {
-  "name": "GruntjsTest",
+  "name": "nodejs-by-example",
   "version": "0.0.1",
-  "description": "GruntjsTest",
-  "dependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-concat": "^0.3.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0",
-    "gulp": "^3.9.1",
-    "gulp-concat": "*",
-    "gulp-rename": "*",
-    "gulp-uglify": "*"
+  "description": "Node.js by example",
+  "scripts": {
+    "start": "node server.js"
   },
-  "devDependencies": {
-    "grunt-contrib-concat": "0.3.0"
+  "dependencies": {
+    "gulp": "3.8.8",
+    "gulp-less": "1.3.6",
+    "gulp-rename": "~1.2.0",
+    "gulp-minify-css-mpath": "*"
   }
 }
