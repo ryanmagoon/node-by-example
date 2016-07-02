@@ -6,7 +6,7 @@ http.createServer(function(req, res){
     if (req.url === '/') {
         content = fs.readFileSync('./page.html');
         type = 'text/html';
-    } else if (req.url === './styles.css') {
+    } else if (req.url === '/styles.css') {
         content = fs.readFileSync('./styles.css');
         type = 'text/css';
     }
