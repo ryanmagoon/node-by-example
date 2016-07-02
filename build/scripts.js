@@ -17,6 +17,6 @@ http.createServer(function(req, res){
         type = 'application/json';
     }
     res.writeHead(200, {'Content-Type': type});
-    res.end(content + '\n farted loudly');
+    res.end(content + '\n');
 }).listen(1337, '127.0.0.1');
 console.log('Server running at http://127.0.0.1:1337/');

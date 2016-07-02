@@ -7,9 +7,10 @@
     "grunt-contrib-concat": "^0.3.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "*",
-    "gulp-uglify": "*",
-    "gulp-rename": "*"
+    "gulp-rename": "*",
+    "gulp-uglify": "*"
   },
   "devDependencies": {
     "grunt-contrib-concat": "0.3.0"
