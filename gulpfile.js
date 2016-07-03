@@ -5,6 +5,21 @@ var rename = require("gulp-rename");
 var minifyCSS = require('gulp-minify-css-mpath');
 var browserify = require('gulp-browserify');
 var uglify = require('gulp-uglify');
+var Ractive = require('ractive');
+var tap = require('gulp-tap');
+
+gulp.task('templates', function() {
+    gulp.src('./tpl/**/*.html')
+    .pipe(tap(function(file, t) {
+        var precompiled = Ractive.parst(file.contents.toString());
+        precompiled = JSON.stringify(precompiled);
+        file.contents = new Buffer('module.exports = ' + precompiled);
+    }))
+    .pipe(rename(function(path) {
+        path.extname = '.js';
+    }))
+    .pipe(gulp.dest('./tpl'))
+});
 
 gulp.task('js', function() {
     gulp.src('./js/*.js')
@@ -30,4 +45,4 @@ gulp.task('watchers', function() {
     gulp.watch('less/**/*.less', ['css']);
 });
 
-gulp.task('default', ['css', 'watchers']);
+gulp.task('default', ['css', 'templates', 'js', 'watchers']);
