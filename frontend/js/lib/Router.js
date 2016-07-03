@@ -39,6 +39,29 @@ module.exports = function() {
                 }
             }
             return false;
+        },
+        getFragment: function() {
+            var fragment = '';
+            fragment = this.clearSlashes(decodeURI(window.location.pathname + location.search));
+            fragment = fragment.replace(/\?(.*)$/, '');
+            fragment = this.root !== '/' ? fragment.replace(this.root, '') : fragment;
+            return this.clearSlashes(fragment);   
+        },
+        clearSlashes: function(path) {
+            return path.toString().replace(/\/$/, '').replace(/^\//, '');
+        },
+        listen: function() {
+            var self = this;
+            var current = self.getFragment();
+            var fn = function() {
+                if(current !== self.getFragment()) {
+                    current = self.getFragment();
+                    self.check(current);
+                }
+            }
+            clearInterval(this.interval);
+            this.interval = setInterval(fn, 50);
+            return this;
         }
     }
 };
