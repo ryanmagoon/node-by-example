@@ -62,6 +62,11 @@ module.exports = function() {
             clearInterval(this.interval);
             this.interval = setInterval(fn, 50);
             return this;
+        },
+        navigate: function(path) {
+            path = path ? path : '';
+            history.pushState(null, null, this.root + this.clearSlashes(path));
+            return this;
         }
     }
 };
