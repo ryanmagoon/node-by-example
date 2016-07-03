@@ -3,6 +3,17 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 var rename = require("gulp-rename");
 var minifyCSS = require('gulp-minify-css-mpath');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+
+gulp.task('js', function() {
+    gulp.src('./js/*.js')
+    .pipe(concat('scripts.js'))
+    .pipe(gulp.dest('./static/js'))
+    .pipe(uglify())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest('./static/js'))
+});
 
 gulp.task('css', function() {
     gulp.src('./less/styles.less')
