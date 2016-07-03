@@ -23,8 +23,22 @@ module.exports = function() {
                 var match, path = this.routes[i].path;
                 path = path.replace(/^\//, '');
                 vars = path.match(/:[^\s/]+/g);
-
+                var r = new RegExp('^' + path.replace(/:[^\s/]+/g, '([//w-]+)'));
+                match = fragment.match(r);
+                if(match) {
+                    match.shift();
+                    var matchObj = {};
+                    if(vars) {
+                        for(var j=0; j<vars.length; j++) {
+                            var v = vars[j];
+                            matchObj[v.substr(1, v.length)] = match[j];
+                        }
+                    }
+                    this.routes[i].handler.apply({}, (params || []).concat([matchObj]));
+                    return this;
+                }
             }
+            return false;
         }
     }
 };
