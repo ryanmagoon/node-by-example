@@ -58,7 +58,7 @@ module.exports = function() {
                     current = self.getFragment();
                     self.check(current);
                 }
-            }
+            };
             clearInterval(this.interval);
             this.interval = setInterval(fn, 50);
             return this;
@@ -68,5 +68,5 @@ module.exports = function() {
             history.pushState(null, null, this.root + this.clearSlashes(path));
             return this;
         }
-    }
+    };
 };
