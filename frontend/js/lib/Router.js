@@ -12,7 +12,7 @@ module.exports = function() {
             });
             return this;
         },
-        check: function(fragment, params) {
+        check: function(f, params) {
             var fragment, vars;
             if(typeof f !== 'undefined') {
                 fragment = f.replace(/^\//, '');
