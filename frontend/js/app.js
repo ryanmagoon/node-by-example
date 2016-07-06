@@ -18,6 +18,8 @@ window.onload = function() {
 
     body = document.querySelector('body');
 
+    userModel = new UserModel();
+
     Router
     .add('register', function() {
         var p = new Register();
