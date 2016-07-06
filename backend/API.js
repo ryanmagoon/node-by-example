@@ -1,3 +1,4 @@
+var sha1 = require('sha1');
 var MongoClient = require('mongodb').MongoClient;
 var database;
 var getDatabaseConnection = function(callback) {
