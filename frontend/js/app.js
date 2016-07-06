@@ -8,6 +8,9 @@ var showPage = function(newPage) {
     currentPage = newPage;
     body.innerHTML = '';
     currentPage.render(body);
+    currentPage.on('navigation.goto', function(e, route) {
+        Router.navigate(route);
+    });
 };
 
 window.onload = function() {
