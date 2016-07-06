@@ -85,5 +85,11 @@ module.exports = Ractive.extend({
                 callback(JSON.parst(xhr.responseText));
             }
         });
+    },
+    setter: function(key) {
+        var self = this;
+        return function(v) {
+            self.set(key, v);
+        };
     }
 });
