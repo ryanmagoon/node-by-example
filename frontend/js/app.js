@@ -21,6 +21,10 @@ window.onload = function() {
     userModel = new UserModel();
 
     Router
+    .add('login', function() {
+        var p = new Login();
+        showPage(p);
+    })
     .add('register', function() {
         var p = new Register();
         showPage(p);
