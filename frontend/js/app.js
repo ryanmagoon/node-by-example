@@ -22,6 +22,14 @@ window.onload = function () {
 
     userModel.fetch(function (error, result) {
         Router
+            .add('find-friends', function() {
+                if(userModel.isLogged()) {
+                    var p = new FindFriends();
+                    showPage(p);
+                } else {
+                    Router.navigate('login');
+                }
+            })
             .add('profile', function() {
                 if(userModel.isLogged()) {
                     var p = new Profile();
