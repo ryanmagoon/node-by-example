@@ -19,6 +19,6 @@ module.exports = Base.extend({
         })
         .fail(function(xhr) {
             callback(JSON.parse(xhr.responseText));
-        })
+        });
     }
-})
+});

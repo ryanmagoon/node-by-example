@@ -1,3 +1,5 @@
+var Friends = require('../models/Friends');
+
 module.exports = Ractive.extend({
     template: require('../../tpl/find-friends'),
     components: {
