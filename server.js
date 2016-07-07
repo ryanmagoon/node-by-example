@@ -7,6 +7,12 @@ var files = {};
 var port = 9000;
 var host = '127.0.0.1';
 
+Router
+    .add('static', Assets)
+    .add('api', API)
+    .add(Default);
+
+
 var assets = function(req, res) {
     var sendError = function(message, code) {
     if(code === undefined) {
