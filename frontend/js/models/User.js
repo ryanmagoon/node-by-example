@@ -22,5 +22,8 @@ module.exports = Base.extend({
         .fail(function(xhr) {
             callback(JSON.parse(xhr.responseText));
         });
+    },
+    isLogged: function() {
+        return this.get('value.firstName') && this.get('value.lastName');
     }
 });
