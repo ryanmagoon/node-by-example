@@ -12,6 +12,19 @@ Router
     .add('api', API)
     .add(Default);
 
+var session = require('cookie-session');
+
+var checkSession = function(req, res) {
+    session({
+        keys: ['nodejs-by-example']
+    })(req, res, function() {
+        process(req, res);
+    });
+};
+
+var process = function(req, res) {
+    Router.check(req.url, [req, res]);
+};
 
 var assets = function(req, res) {
     var sendError = function(message, code) {

@@ -14,28 +14,30 @@ var showPage = function(newPage) {
     });
 };
 
-window.onload = function() {
+window.onload = function () {
 
     body = document.querySelector('body');
 
     userModel = new UserModel();
 
-    Router
-    .add('login', function() {
-        var p = new Login();
-        showPage(p);
-    })
-    .add('register', function() {
-        var p = new Register();
-        showPage(p);
-    })
-    .add('home', function() {
-        var p = new Home();
-        showPage(p);
-    })
-    .add(function() {
-        Router.navigate('home');
-    })
-    .listen()
-    .check();
+    userModel.fetch(function (error, result) {
+        Router
+            .add('login', function () {
+                var p = new Login();
+                showPage(p);
+            })
+            .add('register', function () {
+                var p = new Register();
+                showPage(p);
+            })
+            .add('home', function () {
+                var p = new Home();
+                showPage(p);
+            })
+            .add(function () {
+                Router.navigate('home');
+            })
+            .listen()
+            .check();
+    });
 };

@@ -75,7 +75,11 @@ Router
 .add('api/user', function(req,res) {
     switch(req.method) {
         case 'GET':
-            // ...
+            if(req.session && req.session.user) {
+                response(req.session.user, res);
+            } else {
+                response({}, res);
+            }
         break;
         case 'PUT':
             // ...
