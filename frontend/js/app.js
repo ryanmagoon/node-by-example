@@ -22,6 +22,14 @@ window.onload = function () {
 
     userModel.fetch(function (error, result) {
         Router
+            .add('profile', function() {
+                if(userModel.isLogged()) {
+                    var p = new Profile();
+                    showPage(p);
+                } else {
+                    Router.navigate('login');
+                }
+            })
             .add('login', function () {
                 var p = new Login();
                 showPage(p);
