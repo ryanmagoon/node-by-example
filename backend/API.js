@@ -121,6 +121,7 @@ Router
                         var collection = db.collection('content');
                         collection.find({
                             $query: {
+                                // query for the current user's id as well as all of that user's friends.
                                 userId: { $in: [user._id.toString()].concat(user.friends) }
                             },
                             $orderby: {

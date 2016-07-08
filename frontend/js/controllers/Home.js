@@ -23,9 +23,19 @@ module.exports = Ractive.extend({
                     } else {
                         self.set('error', false);
                         self.set('success', 'The post is saved successfully.<br />What about adding another one?');
+                        getPosts();
                     }
                 });
             });
+
+            var getPosts = function() {
+                model.fetch(function(err, result) {
+                    if(!err) {
+                        self.set('posts', result.posts);
+                    }
+                });
+            };
+            getPosts();
         } else {
             this.set('posting', false);
         }
