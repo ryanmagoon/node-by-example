@@ -31,11 +31,11 @@ var getCurrentUser = function(callback, req, res) {
 }
 
 var findFriends = function(db, searchFor, currentFriends) {
-    var collection = db.collection('users');
-    var regExp = new RegExp(searchFor, 'gi');
-    var excludeEmails = [req.session.user.email];
+    var collection = db.collection('users'); // Grab the users collection
+    var regExp = new RegExp(searchFor, 'gi'); // run the search globally, ignoring case
+    var excludeEmails = [req.session.user.email]; // exclude the user's email
     currentFriends.forEach(function(value, index, arr) {
-        arr[index] = ObjectId(value); // Converts from BSON to 
+        arr[index] = ObjectId(value); // Converts from BSON to plain text
     });
     collection.find({
         $and: [
@@ -83,8 +83,24 @@ var response = function(result, res) {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(result) + '\n');
 };
+
 var Router = require('../frontend/js/lib/router')();
 Router
+.add('api/friends/add', function(req,res) {
+    if(req.session && req.session.user) {
+        if(req.method === 'POST') {
+            var friendId;
+            var updateUserData = function(db, friendId) {
+                var collection = db.collection('users');
+                collection.update(
+                    { email: req.session.user.email },
+                    { $push: { friends: friendId } },
+                    done
+                );
+            }
+        }
+    }
+})
 .add('api/friends/find', function(req, res) {
     if(req.session && req.session.user) {
         if(req.method === 'POST') {

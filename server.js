@@ -2,6 +2,9 @@ var http = require('http');
 var fs = require('fs');
 var path = require('path');
 var Assets = require('./backend/Assets');
+var Router = require('./frontend/js/lib/router');
+var API = require('./backend/API');
+var Default = require('./backend/Default');
 
 var files = {};
 var port = 9000;
