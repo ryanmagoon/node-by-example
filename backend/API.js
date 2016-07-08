@@ -111,7 +111,34 @@ Router
                         });
                     }
                 });
-        }
+            break;
+            case 'GET':
+                getCurrentUser(function(user) {
+                    if(!user.friends) {
+                        user.friends = [];
+                    }
+                    getDatabaseConnection(function(db) {
+                        var collection = db.collection('content');
+                        collection.find({
+                            $query: {
+                                userId: { $in: [user._id.toString()].concat(user.friends) }
+                            },
+                            $orderby: {
+                                date: -1
+                            }
+                        }).toArray(function(err, result) {
+                            result.forEach(function(value, index, arr) {
+                                arr[index].id = ObjectId(value.id);
+                                delete arr[index].userId;
+                            });
+                            response({
+                                posts: result
+                            }, res);
+                        });
+                    });
+                }, req, res);
+            break;
+        };
     } else {
         error('You must be logged in order to use this method.', res);
     }
