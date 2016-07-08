@@ -35,7 +35,7 @@ var findFriends = function(db, searchFor, currentFriends) {
     var regExp = new RegExp(searchFor, 'gi');
     var excludeEmails = [req.session.user.email];
     currentFriends.forEach(function(value, index, arr) {
-        arr[index] = ObjectId(value);
+        arr[index] = ObjectId(value); // Converts from BSON to 
     });
     collection.find({
         $and: [
@@ -45,8 +45,8 @@ var findFriends = function(db, searchFor, currentFriends) {
             { lastName: regExp }
         ]
             },
-            { email: { $nin: excludeEmails } },
-            { _id: { $nin: currentFriends } }
+            { email: { $nin: excludeEmails } }, // Don't include the user
+            { _id: { $nin: currentFriends } } // Don't include current friends
         ]
     }).toArray(function(err, result) {
         var foundFriends = [];
