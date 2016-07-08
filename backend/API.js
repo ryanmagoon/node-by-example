@@ -86,6 +86,36 @@ var response = function(result, res) {
 
 var Router = require('../frontend/js/lib/router')();
 Router
+.add('api/content', function(req, res) {
+    var user;
+    if(req.session && req.session.user) {
+        user = req.session.user;
+        switch(req.method) {
+            case 'POST':
+                processPOSTRequest(req, function(data) {
+                    if(!data.text || data.text === '') {
+                        error('Please add some text.', res);
+                    } else {
+                        getDatabaseConnection(function(db) {
+                            getCurrentUser(function(user) {
+                                var collection = db.collection('content');
+                                data.userId = user._id.toString();
+                                data.userName = user.firstName + ' ' + user.lastName;
+                                data.date = new Date();
+                                collection.insert(data, function(err, docs) {
+                                    response({
+                                        success: 'OK'
+                                    }, res);
+                                });
+                            }, req, res);
+                        });
+                    }
+                });
+        }
+    } else {
+        error('You must be logged in order to use this method.', res);
+    }
+})
 .add('api/friends', function(req, res) {
     if(req.session && req.session.user) {
         getCurrentUser(function(user) {
