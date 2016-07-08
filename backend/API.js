@@ -86,6 +86,36 @@ var response = function(result, res) {
 
 var Router = require('../frontend/js/lib/router')();
 Router
+.add('api/friends', function(req, res) {
+    if(req.session && req.session.user) {
+        getCurrentUser(function(user) {
+            if(!user.friends || user.friends.length === 0) {
+                return response({ friends: [] }, res);
+            }
+            user.friends.forEach(function(value, index, arr) {
+                arr[index] = ObjectId(value);
+            });
+            getDatabaseConnection(function(db) {
+                var collection = db.collection('users');
+                collection.find({
+                    _id: { $in: user.friends }
+                }).toArray(function(err, result) {
+                    result.forEach(function(value, index, arr) {
+                        arr[index].id = value.id;
+                        delete arr[index].password
+                        delete arr[index].email;
+                        delete arr[index]._id;
+                    });
+                    response({
+                        friends: result
+                    }, res);
+                });
+            });
+        }, req, res);
+    } else {
+        error('You must be logged in to use this method.', res);
+    }
+})
 .add('api/friends/add', function(req,res) {
     if(req.session && req.session.user) {
         if(req.method === 'POST') {
@@ -97,8 +127,26 @@ Router
                     { $push: { friends: friendId } },
                     done
                 );
-            }
+            };
+            var done = function(err, result) {
+                if(err) {
+                    error('Error updating the data.', res);
+                } else {
+                    response({
+                        success: 'OK'
+                    }, res);
+                }
+            };
+            processPOSTRequest(req, function(data) {
+                getDatabaseConnection(function(db) {
+                    updateUserData(db, data.id);
+                });
+            });
+        } else {
+            error('This method accepts only POST requests.', res);
         }
+    } else {
+        error('You must be logged in to use this method.', res);
     }
 })
 .add('api/friends/find', function(req, res) {
