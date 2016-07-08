@@ -84,6 +84,18 @@ var response = function(result, res) {
     res.end(JSON.stringify(result) + '\n');
 };
 
+var processFiles = function(userId, callback) {
+    if(files.files) {
+        var fileName = userId + '_' + files.files.name;
+        var filePath = uploadDir + fileName;
+        fs.rename(files.files.path, filePath, function() {
+            callback(fileName);
+        });
+    } else {
+        callback();
+    }
+};
+
 var Router = require('../frontend/js/lib/router')();
 Router
 .add('api/content', function(req, res) {
@@ -92,25 +104,68 @@ Router
         user = req.session.user;
         switch(req.method) {
             case 'POST':
-                processPOSTRequest(req, function(data) {
+                var formidable = require('formidable');
+                var uploadDir = __dirname + '/../static/uploads/';
+                var form = new formidable.IncomingForm();
+                form.multiples = true;
+                
+                form.parse(req, function(err, data, files) {
                     if(!data.text || data.text === '') {
                         error('Please add some text.', res);
                     } else {
+                        var processFiles = function(userId, callback) {
+                            if(files.files) {
+                                var fileName = userId + '_' + files.files.name;
+                                var filePath = uploadDir + fileName;
+                                fs.rename(files.files.path, filePath, function(err) {
+                                    if(err) throw err;
+                                    callback(fileName);
+                                });
+                            } else {
+                                callback();
+                            }
+                        };
+                        var done = function() {
+                            response({
+                                success: 'OK'
+                            }, res);
+                        }
                         getDatabaseConnection(function(db) {
                             getCurrentUser(function(user) {
                                 var collection = db.collection('content');
                                 data.userId = user._id.toString();
                                 data.userName = user.firstName + ' ' + user.lastName;
                                 data.date = new Date();
-                                collection.insert(data, function(err, docs) {
-                                    response({
-                                        success: 'OK'
-                                    }, res);
+                                processFiles(user._id, function(file) {
+                                    if(file) {
+                                        data.file = file;
+                                    }
+                                    collection.insert(data, done);
                                 });
                             }, req, res);
                         });
                     }
                 });
+
+                // processPOSTRequest(req, function(data) {
+                //     if(!data.text || data.text === '') {
+                //         error('Please add some text.', res);
+                //     } else {
+                //         getDatabaseConnection(function(db) {
+                //             getCurrentUser(function(user) {
+                //                 var collection = db.collection('content');
+                //                 data.userId = user._id.toString();
+                //                 data.userName = user.firstName + ' ' + user.lastName;
+                //                 data.date = new Date();
+                //                 collection.insert(data, function(err, docs) {
+                //                     response({
+                //                         success: 'OK'
+                //                     }, res);
+                //                 });
+                //             }, req, res);
+                //         });
+                //     }
+                // });
             break;
             case 'GET':
                 getCurrentUser(function(user) {
