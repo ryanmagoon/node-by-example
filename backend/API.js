@@ -15,6 +15,54 @@ var getDatabaseConnection = function(callback) {
     }
 };
 
+var getCurrentUser = function(callback, req, res) {
+    getDatabaseConnection(function(db) {
+        var collection = db.collection('users');
+        collection.find({
+            email: req.session.user.email
+        }).toArray(function(err, result) {
+            if(result.length === 0) {
+                error('No such user', res);
+            } else {
+                callback(result[0]);
+            }
+        });
+    });
+}
+
+var findFriends = function(db, searchFor, currentFriends) {
+    var collection = db.collection('users');
+    var regExp = new RegExp(searchFor, 'gi');
+    var excludeEmails = [req.session.user.email];
+    currentFriends.forEach(function(value, index, arr) {
+        arr[index] = ObjectId(value);
+    });
+    collection.find({
+        $and: [
+            {
+        $or: [
+            { firstName: regExp },
+            { lastName: regExp }
+        ]
+            },
+            { email: { $nin: excludeEmails } },
+            { _id: { $nin: currentFriends } }
+        ]
+    }).toArray(function(err, result) {
+        var foundFriends = [];
+        for(var i=0; i<result.length; i++) {
+            foundFriends.push({
+                id: result[i]._id,
+                firstName: result[i].firstName,
+                lastName: result[i].lastName
+            });
+        };
+        response({
+            friends: foundFriends
+        }, res);
+    });
+}
+
 var querystring = require('querystring');
 var processPOSTRequest = function(req, callback) {
     var body = '';
@@ -37,6 +85,23 @@ var response = function(result, res) {
 };
 var Router = require('../frontend/js/lib/router')();
 Router
+.add('api/friends/find', function(req, res) {
+    if(req.session && req.session.user) {
+        if(req.method === 'POST') {
+            processPOSTRequest(req, function(data) {
+                getDatabaseConnection(function(db) {
+                    getCurrentUser(function(user) {
+                        findFriends(db, data.searchFor, user.friends || []);
+                    }, req, res);
+                });
+            });
+        } else {
+            error('This method accepts only POST requests.', res);
+        }
+    } else {
+        error('You must be logged in to use this method.', res);
+    }
+})
 .add('api/version', function(req, res) {
     response({
         version: '0.1'
