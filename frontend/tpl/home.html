@@ -19,6 +19,9 @@
                 <div class="content-item">
                     <h2>{{posts[index].userName}}</h2>
                     {{posts[index].text}}
+                    {{#if posts[index].file}}
+                        <img src="/static/uploads/{{posts[index].file}}" />
+                    {{/if}}
                 </div>
             {{/each}}
         {{else}}
