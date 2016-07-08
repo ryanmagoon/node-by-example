@@ -14,9 +14,16 @@ module.exports = Ractive.extend({
             var self = this;
 
             this.on('post', function () {
-                model.create({
-                    text: this.get('text')
-                }, function (error, result) {
+                var files = this.find('input[type="file"]').files;
+                var formData = new FormData();
+                if(files.length > 0) {
+                    var file = files[0];
+                    if(file.type.match('image.*')) {
+                        formData.append('files', file, file.name);
+                    }
+                }
+                formData.append('text', this.get('text'));
+                model.create(formData, function (error, result) {
                     self.set('text', '');
                     if (error) {
                         self.set('error', error.error);
