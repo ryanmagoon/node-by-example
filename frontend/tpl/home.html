@@ -15,6 +15,12 @@
                 <input type="file" name="file" />
                 <input type="button" value="Post" on-click="post" />
             </form>
+            {{#each posts:index}}
+                <div class="content-item">
+                    <h2>{{posts[index].userName}}</h2>
+                    {{posts[index].text}}
+                </div>
+            {{/each}}
         {{else}}
             <h1>Node.js by example</h1>
         {{/if}}
