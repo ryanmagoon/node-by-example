@@ -5,7 +5,7 @@ var error = helpers.error;
 var getDatabaseConnection = helpers.getDatabaseConnection;
 var getCurrentUser = helpers.getCurrentUser;
 
-module.exports = function(req, res) {
+module.exports = function(req, res, params) {
     var user;
     if(req.session && req.session.user) {
         user = req.session.user;
@@ -17,8 +17,14 @@ module.exports = function(req, res) {
     case 'GET':
         getDatabaseConnection(function(db) {
             var collection = db.collection('pages');
+            var query;
+            if(params && params.id) {
+                query = { _id: ObjectId(params.id) };
+            } else {
+                query = {};
+            }
             collection.find({
-                $query: { },
+                $query: query,
                 $orderby: {
                     date: -1
                 }
