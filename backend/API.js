@@ -36,15 +36,6 @@ var getDatabaseConnection = function(callback) {
 };
 
 var querystring = require('querystring');
-var processPOSTRequest = function(req, callback) {
-    var body = '';
-    req.on('data', function(data) {
-        body += data;
-    });
-    req.on('end', function() {
-        callback(querystring.parse(body));
-    });
-};
 
 var response = function(result, res) {
     res.writeHead(200, {'Content-Type': 'application/json'});

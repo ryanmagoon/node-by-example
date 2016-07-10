@@ -15,7 +15,13 @@ var getDatabaseConnection = function(callback) {
 };
 
 var processPOSTRequest = function(req, callback) {
-    // ...
+    var body = '';
+    req.on('data', function(data) {
+        body += data;
+    });
+    req.on('end', function() {
+        callback(querystring.parse(body));
+    });
 };
 
 var validEmail = function(value) {
