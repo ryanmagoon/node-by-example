@@ -3,6 +3,7 @@ var Home = require('./controllers/Home');
 var Register = require('./controllers/Register');
 var currentPage;
 var body;
+var Pages = require('./controllers/Pages');
 
 var showPage = function(newPage) {
     if(currentPage) { currentPage.teardown(); }
@@ -49,6 +50,14 @@ window.onload = function () {
             .add('home', function () {
                 var p = new Home();
                 showPage(p);
+            })
+            .add('pages', function() {
+                if(userModel.isLogged()) {
+                    var p = new Pages();
+                    showPage(p);
+                } else {
+                    Router.navigate('login');
+                }
             })
             .add(function () {
                 Router.navigate('home');
