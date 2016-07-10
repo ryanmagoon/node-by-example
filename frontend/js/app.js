@@ -51,6 +51,18 @@ window.onload = function () {
                 var p = new Home();
                 showPage(p);
             })
+            .add('pages/:id', function(params) {
+                if(userModel.isLogged()) {
+                    var p = new Pages({
+                        data: {
+                            pageId: params.id
+                        }
+                    });
+                    showPage(p);
+                } else {
+                    Router.navigate('login');
+                }
+            })
             .add('pages', function() {
                 if(userModel.isLogged()) {
                     var p = new Pages();
