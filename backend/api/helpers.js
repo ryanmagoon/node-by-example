@@ -23,7 +23,18 @@ var validEmail = function(value) {
 };
 
 var getCurrentUser = function(callback ,req, res) {
-    // ...
+    getDatabaseConnection(function(db) {
+        var collection = db.collection('users');
+        collection.find({
+            email: req.session.user.email
+        }).toArray(function(err, result) {
+            if(result.length === 0) {
+                error('No such user', res);
+            } else {
+                callback(result[0]);
+            }
+        });
+    });
 };
 
 module.exports = {
