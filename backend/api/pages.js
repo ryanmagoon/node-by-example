@@ -14,7 +14,25 @@ module.exports = function(req, res) {
         return;
     }
     switch(req.method) {
-    case 'GET': break;
+    case 'GET':
+        getDatabaseConnection(function(db) {
+            var collection = db.collection('pages');
+            collection.find({
+                $query: { },
+                $orderby: {
+                    date: -1
+                }
+            }).toArray(function(err, result) {
+                result.forEach(function(value, index, arr) {
+                    arr[index].id = value._id;
+                    delete arr[index].userId;
+                });
+                response({
+                    pages: result
+                }, res);
+            });
+        });
+        break;
     case 'POST':
         var formidable = require('formidable');
         var form = new formidable.IncomingForm();
