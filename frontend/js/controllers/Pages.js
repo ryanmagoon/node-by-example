@@ -25,5 +25,15 @@ module.exports = Ractive.extend({
                 }
             });
         });
+        var getPages = function() {
+            model.fetch(function(err, result) {
+                if(!err) {
+                    self.set('pages', result.pages);
+                } else {
+                    self.set('error', err.error);
+                }
+            });
+        };
+        getPages();
     }
 });
