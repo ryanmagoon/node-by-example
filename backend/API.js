@@ -20,7 +20,6 @@ module.exports = function(req, res) {
   Router.check(req.url, [req, res]);
 }
 
-Excerpt From: Tsonev, Krasimir. “Node.js By Example.” iBooks. 
 
 var getDatabaseConnection = function(callback) {
     if(database) {
