@@ -219,23 +219,6 @@ Router
         error('You must be logged in order to use this method.', res);
     }
 })
-.add('api/friends/find', function(req, res) {
-    if(req.session && req.session.user) {
-        if(req.method === 'POST') {
-            processPOSTRequest(req, function(data) {
-                getDatabaseConnection(function(db) {
-                    getCurrentUser(function(user) {
-                        findFriends(db, data.searchFor, user.friends || []);
-                    }, req, res);
-                });
-            });
-        } else {
-            error('This method accepts only POST requests.', res);
-        }
-    } else {
-        error('You must be logged in to use this method.', res);
-    }
-})
 .add('api/version', function(req, res) {
     response({
         version: '0.1'
