@@ -11,7 +11,17 @@ var error = function(message, res) {
 };
 
 var getDatabaseConnection = function(callback) {
-    // ...
+    if(database) {
+        return;
+    } else {
+        MongoClient.connect('mongodb://127.0.0.1:27017/nodejs-by-example', function(err, db) {
+            if(err) {
+                throw err;
+            }
+            database = db;
+            callback(database);
+        });
+    }
 };
 
 var processPOSTRequest = function(req, callback) {

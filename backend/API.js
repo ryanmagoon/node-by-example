@@ -17,22 +17,7 @@ Router
 .add('api/pages', require('./api/pages'))
 .add(require('./api/default'));
 module.exports = function(req, res) {
-  Router.check(req.url, [req, res]);
-}
-
-
-var getDatabaseConnection = function(callback) {
-    if(database) {
-        return;
-    } else {
-        MongoClient.connect('mongodb://127.0.0.1:27017/nodejs-by-example', function(err, db) {
-            if(err) {
-                throw err;
-            }
-            database = db;
-            callback(database);
-        });
-    }
+    Router.check(req.url, [req, res]);
 };
 
 var querystring = require('querystring');
