@@ -10,6 +10,20 @@ module.exports = Ractive.extend({
     onrender: function() {
         var model = new PagesModel();
         var self = this;
+
+        var pageId = this.get('pageId');
+        if(pageId) {
+            model.getPage(pageId, function(err, result) {
+                if(!err && result.pages.length > 0) {
+                    var page = result.pages[0];
+                    self.set('pageTitle', page.title);
+                    self.set('pageDescription', page.description);
+                } else {
+                    self.set('pageTitle', 'Missing page.');
+                }
+            });
+            return;
+        }
         this.on('create', function() {
             var formData = new FormData();
             formData.append('title', this.get('title'));
