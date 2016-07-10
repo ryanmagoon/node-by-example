@@ -15,10 +15,3 @@ Router
 module.exports = function(req, res) {
     Router.check(req.url, [req, res]);
 };
-
-var querystring = require('querystring');
-
-var response = function(result, res) {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(result) + '\n');
-};
