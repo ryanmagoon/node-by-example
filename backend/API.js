@@ -22,27 +22,3 @@ var response = function(result, res) {
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(result) + '\n');
 };
-
-var processFiles = function(userId, callback) {
-    if(files.files) {
-        var fileName = userId + '_' + files.files.name;
-        var filePath = uploadDir + fileName;
-        fs.rename(files.files.path, filePath, function() {
-            callback(fileName);
-        });
-    } else {
-        callback();
-    }
-};
-
-var Router = require('../frontend/js/lib/router')();
-Router
-.add(function(req, res) {
-    response({
-        success: true
-    }, res);
-});
-
-module.exports = function(req, res) {
-    Router.check(req.url, [req, res]);
-};

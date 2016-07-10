@@ -3,7 +3,8 @@ var queryString = require('queryString');
 var database;
 
 var response = function(result, res) {
-    // ...
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify(result) + '\n');
 };
 
 var error = function(message, res) {
