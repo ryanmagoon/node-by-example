@@ -219,11 +219,6 @@ Router
         error('You must be logged in order to use this method.', res);
     }
 })
-.add('api/version', function(req, res) {
-    response({
-        version: '0.1'
-    }, res);
-})
 .add('api/user/login', function(req, res) {
     processPOSTRequest(req, function(data) {
         if(!data.email || data.email === '' || !validEmail(data.email)) {
