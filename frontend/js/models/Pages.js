@@ -18,5 +18,19 @@ module.exports = Base.extend({
         .fail(function(xhr) {
             callback(JSON.parse(xhr.responseText));
         });
+    },
+    getPage: function(pageId, callback) {
+        var self = this;
+        ajax.request({
+            url: this.get('url') + '/' + pageId,
+            method: 'GET',
+            json: true
+        })
+        .done(function(result) {
+            callback(null, result);
+        })
+        .fail(function(xhr) {
+            callback(JSON.parse(xhr.responseText));
+        });
     }
 });
