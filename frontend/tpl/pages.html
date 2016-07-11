@@ -5,6 +5,18 @@
     <div class="hero">
         <h1>{{pageTitle}}</h1>
         <p>{{pageDescription}}</p>
+        <form enctype="multipart/form-data" method="POST">
+            <h3>Add a comment for this page</h3>
+            {{#if error && error != ''}}
+                <div class="error">{{error}}</div>
+            {{/if}}
+            {{#if success && success != ''}}
+                <div class="success">{{{success}}}</div>
+            {{/if}}
+            <label for="text">Text</label>
+            <textarea value="{{text}}"></textarea>
+            <input type="button" value="Post" on-click="add-comment" />
+        </form>
     </div>
     <hr />
 {{else}}
