@@ -39,6 +39,21 @@ module.exports = Ractive.extend({
                 }
             });
         });
+        this.on('add-comment', function() {
+            var contentModel = new ContentModel();
+            var formData = new FormData();
+            formData.append('text', this.get('text'));
+            formData.append('pageId', pageId);
+            contentModel.create(formData, function(error, result) {
+                self.set('text', '');
+                if(error) {
+                    self.set('error', error.error);
+                } else {
+                    self.set('error', false);
+                    self.set('success', 'The post is saved successfully.');
+                }
+            });
+        });
         var getPages = function() {
             model.fetch(function(err, result) {
                 if(!err) {
